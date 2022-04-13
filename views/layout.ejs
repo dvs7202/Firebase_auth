@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Firebase Package-->
+    <script src="https://www.gstatic.com/firebasejs/5.8.5/firebase.js"></script>
+
+    <!-- Loads the login UI elements-->
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css"
+    />
+
+    <title>Document</title>
+  </head>
+  <body>
+    <%- body %>
+    <script>
+      var firebaseConfig = {
+        apiKey: "AIzaSyC7Jqc7JFLsZLw_BCBTLKCWfrI39soANI8",
+        authDomain: "ui-project-42b15.firebaseapp.com",
+        projectId: "ui-project-42b15",
+        storageBucket: "ui-project-42b15.appspot.com",
+        messagingSenderId: "520461185778",
+        appId: "1:520461185778:web:57256acf572e388a80566b",
+        measurementId: "G-XW9428F7YV",
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+
+      //FIREbaseUI config
+      var uiConfig = {
+        signInOptions: [
+          //Google sign in option
+          firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+          firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+          firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        ],
+
+        callbacks: {
+          signInSuccess: function (user, credential, redirectUrl) {
+            //User successfully signed in.
+            user
+              .getIdToken()
+              .then(function (Idtoken) {
+                window.location.href = "/savecookie?Idtoken=" + Idtoken;
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          },
+        },
+      };
+      var ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+      // The start method will wait until the DOM is loaded.
+      ui.start("#firebaseui-auth-container", uiConfig);
+    </script>
+  </body>
+</html>
